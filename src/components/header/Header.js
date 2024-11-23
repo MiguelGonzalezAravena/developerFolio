@@ -1,80 +1,94 @@
-import React from "react";
-import "./Header.css";
-import { Fade } from "react-reveal";
+import React, { useContext } from 'react';
+import Headroom from 'react-headroom';
+import './Header.scss';
+import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
+import StyleContext from '../../contexts/StyleContext';
 import {
-  achievementSection,
-  bigProjects,
-  blogSection,
   greeting,
+  workExperiences,
+  skillsSection,
   openSource,
+  blogSection,
   talkSection,
-  workExperiences
-} from "../../portfolio";
+  achievementSection,
+  resumeSection,
+  contactInfo
+} from '../../portfolio';
 
 function Header() {
-  const exp = workExperiences.viewExperiences;
-  const projects = bigProjects.showBigProjects;
-  const achievements = achievementSection.showAchievements;
-  const blogs = blogSection.showBlogs;
-  const talks = talkSection.showTalks;
+  const { isDark } = useContext(StyleContext);
+  const viewExperience = workExperiences.display;
+  const viewOpenSource = openSource.display;
+  const viewSkills = skillsSection.display;
+  const viewAchievement = achievementSection.display;
+  const viewBlog = blogSection.display;
+  const viewTalks = talkSection.display;
+  const viewResume = resumeSection.display;
 
   return (
-    <Fade top duration={1000} distance="20px">
-      <div>
-        <header className="header">
-          <a href="#logo" className="logo">
-            <span className="grey-color"> &lt;</span>
-            <span className="logo-name">{greeting.username}</span>
-            <span className="grey-color">/&gt;</span>
-          </a>
-          <input className="menu-btn" type="checkbox" id="menu-btn" />
-          <label className="menu-icon" htmlFor="menu-btn">
-            <span className="navicon"></span>
-          </label>
-          <ul className="menu">
+    <Headroom>
+      <header className={isDark ? "dark-menu header" : "header"}>
+        <a href="/" className="logo">
+          <span className="grey-color"> &lt;</span>
+          <span className="logo-name">{greeting.username}</span>
+          <span className="grey-color">/&gt;</span>
+        </a>
+        <input className="menu-btn" type="checkbox" id="menu-btn" />
+        <label
+          className="menu-icon"
+          htmlFor="menu-btn"
+          style={{ color: "white" }}
+        >
+          <span className={isDark ? "navicon navicon-dark" : "navicon"}></span>
+        </label>
+        <ul className={isDark ? "dark-menu menu" : "menu"}>
+          {viewSkills && (
             <li>
-              <a href="#skills">Habilidades</a>
+              <a href="#skills">{skillsSection.title}</a>
             </li>
-            {exp === true &&
-              <li>
-                <a href="#experience">Experiencia</a>
-              </li>
-            }
-            {
-              openSource.showGithubProfile === "true" &&
-              <li>
-                <a href="#opensource">GitHub</a>
-              </li>
-            }
-            {projects === true &&
-              <li>
-                <a href="#projects">Projects</a>
-              </li>
-            }
-            {
-              achievements === true &&
-              <li>
-                <a href="#achievements">Achievements</a>
-              </li>
-            }
-            {
-              blogs === true &&
-              <li>
-                <a href="#blogs">Blogs</a>
-              </li>
-            }
-            {talks === true &&
-              <li>
-                <a href="#talks">Talks</a>
-              </li>
-            }
+          )}
+          {viewExperience && (
             <li>
-              <a href="#contact">Contacto</a>
+              <a href="#experience">{workExperiences.title}</a>
             </li>
-          </ul>
-        </header>
-      </div>
-    </Fade>
+          )}
+          {viewOpenSource && (
+            <li>
+              <a href="#opensource">{openSource.title}</a>
+            </li>
+          )}
+          {viewAchievement && (
+            <li>
+              <a href="#achievements">Achievements</a>
+            </li>
+          )}
+          {viewBlog && (
+            <li>
+              <a href="#blogs">Blogs</a>
+            </li>
+          )}
+          {viewTalks && (
+            <li>
+              <a href="#talks">Talks</a>
+            </li>
+          )}
+          {viewResume && (
+            <li>
+              <a href="#resume">CV</a>
+            </li>
+          )}
+          <li>
+            <a href="#contact">{contactInfo.title}</a>
+          </li>
+          <li>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a>
+              <ToggleSwitch />
+            </a>
+          </li>
+        </ul>
+      </header>
+    </Headroom>
   );
 }
 export default Header;
